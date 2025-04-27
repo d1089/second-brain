@@ -1,4 +1,3 @@
-// src/TodoApp.test.jsx
 import { render, screen, fireEvent } from "@testing-library/react";
 import { TodoList } from "./TodoList";
 import "@testing-library/jest-dom";
