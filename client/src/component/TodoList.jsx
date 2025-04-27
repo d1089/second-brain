@@ -4,9 +4,23 @@ import {
   TextField,
   Button,
   Typography,
+  List,
+  ListItem,
 } from "@mui/material";
+import { useState } from "react";
 
 export function TodoList() {
+  const [newTodo, setNewTodo] = useState(""); // State for new todo
+  const [todos, setTodos] = useState([]); // State to hold the list of todos
+
+  // Handle adding a new todo
+  const handleAddTodo = () => {
+    if (newTodo.trim()) {
+      setTodos((prevTodos) => [...prevTodos, newTodo]);
+      setNewTodo(""); // Clear the input after adding
+    }
+  };
+
   return (
     <div style={{ maxWidth: "500px", margin: "2rem auto" }}>
       <Card>
@@ -17,11 +31,25 @@ export function TodoList() {
             Todo List
           </Typography>
 
-          {/* Input field - placeholder="Enter todo" */}
+          {/* Input field with placeholder */}
+          <TextField
+            placeholder="Enter todo"
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)} // Handle input change
+            fullWidth
+          />
 
-          {/* Add button - text="Add" */}
+          {/* Button to add todo */}
+          <Button variant="contained" color="primary" onClick={handleAddTodo}>
+            Add
+          </Button>
 
-          {/* List of todos - will come here */}
+          {/* Todo list */}
+          <List>
+            {todos.map((todo, index) => (
+              <ListItem key={index}>{todo}</ListItem>
+            ))}
+          </List>
         </CardContent>
       </Card>
     </div>
