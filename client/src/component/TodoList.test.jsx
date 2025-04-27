@@ -9,12 +9,12 @@ describe("TodoList", () => {
     render(<TodoList />);
 
     const input = screen.getByPlaceholderText(/enter todo/i);
-    fireEvent.change(input, { target: { value: "Buy  Grocery" } });
+    fireEvent.change(input, { target: { value: "Buy Bread" } });
 
     const addButton = screen.getByRole("button", { name: /add/i });
     fireEvent.click(addButton);
 
-    const todoItem = screen.getByText("Buy Grocery");
+    const todoItem = screen.getByText("Buy Bread");
     expect(todoItem).toBeInTheDocument();
   });
 });
