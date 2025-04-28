@@ -126,7 +126,7 @@ Start the React development server:
 npm run dev
 ```
 
-The frontend application should now be running at `http://localhost:3000`.
+The frontend application should now be running at `http://localhost:5173`.
 
 ---
 
