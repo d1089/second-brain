@@ -16,9 +16,21 @@ export function TodoList() {
   // Handle adding a new todo
   const handleAddTodo = () => {
     if (newTodo.trim()) {
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
-      setNewTodo(""); // Clear the input after adding
+      setTodos((prevTodos) => [
+        ...prevTodos,
+        { text: newTodo, completed: false },
+      ]);
+      setNewTodo(""); // Clear input after adding
     }
+  };
+
+  // Handle toggling completion of a todo
+  const handleToggleCompletion = (index) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo, i) =>
+        i === index ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
   };
 
   return (
@@ -31,7 +43,7 @@ export function TodoList() {
             Todo List
           </Typography>
 
-          {/* Input field with placeholder */}
+          {/* Input field */}
           <TextField
             placeholder="Enter todo"
             value={newTodo}
@@ -39,7 +51,7 @@ export function TodoList() {
             fullWidth
           />
 
-          {/* Button to add todo */}
+          {/* Add button */}
           <Button variant="contained" color="primary" onClick={handleAddTodo}>
             Add
           </Button>
@@ -47,7 +59,17 @@ export function TodoList() {
           {/* Todo list */}
           <List>
             {todos.map((todo, index) => (
-              <ListItem key={index}>{todo}</ListItem>
+              <ListItem
+                key={index}
+                onClick={() => handleToggleCompletion(index)} // Toggle on click
+                className={todo.completed ? "completed" : ""} // Add "completed" class if completed
+                style={{
+                  textDecoration: todo.completed ? "line-through" : "none", // Strike-through completed todos
+                  cursor: "pointer",
+                }}
+              >
+                {todo.text}
+              </ListItem>
             ))}
           </List>
         </CardContent>
