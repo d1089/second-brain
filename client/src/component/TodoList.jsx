@@ -8,26 +8,33 @@ import {
   ListItem,
 } from "@mui/material";
 import { useState } from "react";
+import axios from "axios"; // 📦 Import axios
 
 export function TodoList() {
-  const [newTodo, setNewTodo] = useState(""); // State for new todo
-  const [todos, setTodos] = useState([]); // State to hold the list of todos
+  const [newTodo, setNewTodo] = useState("");
+  const [todos, setTodos] = useState([]);
 
-  // Handle adding a new todo
-  const handleAddTodo = () => {
-    if (newTodo.trim()) {
-      setTodos((prevTodos) => [
-        ...prevTodos,
-        { text: newTodo, completed: false },
-      ]);
-      setNewTodo(""); // Clear input after adding
+  // 🛜 Handle adding a new todo using axios
+  const handleAddTodo = async () => {
+    if (!newTodo.trim()) return;
+
+    try {
+      const response = await axios.post("http://localhost:8000/todos", {
+        title: newTodo,
+      });
+
+      const createdTodo = response.data;
+      setTodos((prev) => [...prev, createdTodo]);
+      setNewTodo(""); // Clear input after successful add
+    } catch (error) {
+      console.error("Error adding todo:", error);
     }
   };
 
-  // Handle toggling completion of a todo
+  // Toggle completion (only in UI for now)
   const handleToggleCompletion = (index) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo, i) =>
+    setTodos((prev) =>
+      prev.map((todo, i) =>
         i === index ? { ...todo, completed: !todo.completed } : todo
       )
     );
@@ -47,7 +54,7 @@ export function TodoList() {
           <TextField
             placeholder="Enter todo"
             value={newTodo}
-            onChange={(e) => setNewTodo(e.target.value)} // Handle input change
+            onChange={(e) => setNewTodo(e.target.value)}
             fullWidth
           />
 
@@ -60,15 +67,14 @@ export function TodoList() {
           <List>
             {todos.map((todo, index) => (
               <ListItem
-                key={index}
-                onClick={() => handleToggleCompletion(index)} // Toggle on click
-                className={todo.completed ? "completed" : ""} // Add "completed" class if completed
+                key={todo.id ?? index}
+                onClick={() => handleToggleCompletion(index)}
                 style={{
-                  textDecoration: todo.completed ? "line-through" : "none", // Strike-through completed todos
+                  textDecoration: todo.completed ? "line-through" : "none",
                   cursor: "pointer",
                 }}
               >
-                {todo.text}
+                {todo.title}
               </ListItem>
             ))}
           </List>

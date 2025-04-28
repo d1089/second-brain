@@ -1,11 +1,22 @@
 from fastapi import FastAPI, status
 from app.models import TodoCreate, Todo
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 # Temporary in-memory storage
 todos = []
 current_id = 1
+
+
+# Allow frontend (React) to talk to backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # React app origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
